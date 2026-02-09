@@ -6,34 +6,33 @@
   <title>Gaia — Astral Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --void: #030508;
-      --deep: #060a14;
-      --surface: rgba(140, 170, 255, 0.03);
-      --surface-hover: rgba(140, 170, 255, 0.07);
-      --border: rgba(140, 170, 255, 0.06);
-      --border-hover: rgba(140, 170, 255, 0.18);
-      --text: #c8d4e8;
-      --text-dim: #5a6a88;
-      --accent: #7b9aff;
-      --accent-soft: rgba(123, 154, 255, 0.12);
-      --warm: #e8c47a;
-      --warm-soft: rgba(232, 196, 122, 0.12);
+      --void: #020306;
+      --surface: rgba(255, 210, 80, 0.02);
+      --surface-hover: rgba(255, 210, 80, 0.06);
+      --border: rgba(255, 210, 80, 0.06);
+      --border-hover: rgba(255, 210, 80, 0.2);
+      --text: #d4cfc4;
+      --text-dim: #6a6352;
+      --text-bright: #f0e8d0;
+      --gold: #f0c850;
+      --gold-bright: #ffe88a;
+      --gold-soft: rgba(240, 200, 80, 0.1);
+      --gold-glow: rgba(240, 200, 80, 0.25);
+      --amber: #e8a020;
       --violet: #a78bfa;
-      --violet-soft: rgba(167, 139, 250, 0.12);
+      --violet-soft: rgba(167, 139, 250, 0.1);
       --teal: #5eead4;
-      --teal-soft: rgba(94, 234, 212, 0.12);
+      --teal-soft: rgba(94, 234, 212, 0.1);
+      --blue: #7b9aff;
+      --blue-soft: rgba(123, 154, 255, 0.1);
       --rose: #f472b6;
-      --rose-soft: rgba(244, 114, 182, 0.12);
-      --font-display: 'Cormorant Garamond', 'Georgia', serif;
+      --rose-soft: rgba(244, 114, 182, 0.1);
+      --font-display: 'Playfair Display', Georgia, serif;
       --font-body: 'Outfit', system-ui, sans-serif;
     }
 
@@ -47,604 +46,576 @@
       min-height: 100vh;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      cursor: default;
     }
 
-    /* ── Starfield Canvas ── */
-    #starfield {
+    /* ── Canvas Layers ── */
+    #starfield, #shootingstar {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
     }
+    #shootingstar { z-index: 1; }
 
-    /* ── Deep Space Atmosphere ── */
+    /* ── Nebula Atmosphere ── */
     .atmosphere {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
     }
-
     .atmosphere::before {
       content: '';
       position: absolute;
-      width: 180vmax;
-      height: 180vmax;
-      top: -50%;
-      left: -40%;
-      background: radial-gradient(ellipse at 35% 40%,
-        rgba(30, 50, 120, 0.10) 0%,
-        rgba(15, 25, 70, 0.05) 35%,
-        transparent 65%);
-      animation: drift1 80s ease-in-out infinite alternate;
+      width: 200vmax; height: 200vmax;
+      top: -60%; left: -50%;
+      background: radial-gradient(ellipse at 30% 35%,
+        rgba(180, 140, 40, 0.06) 0%, rgba(120, 80, 20, 0.03) 30%, transparent 60%);
+      animation: drift1 90s ease-in-out infinite alternate;
     }
-
     .atmosphere::after {
       content: '';
       position: absolute;
-      width: 140vmax;
-      height: 140vmax;
-      bottom: -40%;
-      right: -30%;
-      background: radial-gradient(ellipse at 65% 55%,
-        rgba(80, 40, 140, 0.07) 0%,
-        rgba(40, 15, 90, 0.03) 35%,
-        transparent 65%);
-      animation: drift2 100s ease-in-out infinite alternate;
+      width: 160vmax; height: 160vmax;
+      bottom: -50%; right: -40%;
+      background: radial-gradient(ellipse at 65% 60%,
+        rgba(60, 30, 120, 0.05) 0%, rgba(30, 10, 70, 0.02) 35%, transparent 60%);
+      animation: drift2 110s ease-in-out infinite alternate;
     }
-
-    .atmosphere-extra {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
+    .atmo2 {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
     }
-
-    .atmosphere-extra::before {
+    .atmo2::before {
       content: '';
       position: absolute;
-      width: 100vmax;
-      height: 100vmax;
-      top: 20%;
-      right: -20%;
+      width: 120vmax; height: 120vmax;
+      top: -10%; right: -30%;
       background: radial-gradient(ellipse at 50% 50%,
-        rgba(123, 154, 255, 0.04) 0%,
-        transparent 50%);
-      animation: drift3 65s ease-in-out infinite alternate;
+        rgba(240, 200, 80, 0.03) 0%, transparent 45%);
+      animation: drift3 70s ease-in-out infinite alternate;
+    }
+    .atmo2::after {
+      content: '';
+      position: absolute;
+      width: 80vmax; height: 80vmax;
+      bottom: 10%; left: -10%;
+      background: radial-gradient(circle,
+        rgba(240, 180, 50, 0.025) 0%, transparent 50%);
+      animation: drift1 55s ease-in-out infinite alternate-reverse;
     }
 
     @keyframes drift1 {
       0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
-      100% { transform: translate(3%, 2%) rotate(5deg) scale(1.03); }
+      100% { transform: translate(4%, 3%) rotate(6deg) scale(1.04); }
     }
     @keyframes drift2 {
-      0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
-      100% { transform: translate(-3%, -1.5%) rotate(-4deg) scale(1.02); }
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-3%, -2%) rotate(-5deg); }
     }
     @keyframes drift3 {
       0%   { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-5%, 3%) scale(1.05); }
+      100% { transform: translate(-6%, 4%) scale(1.06); }
     }
 
-    /* ── Constellation Grid (SVG overlay) ── */
-    .constellation-grid {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.025;
+    /* ── Dot Grid ── */
+    .dot-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      opacity: 0.018;
       background-image:
-        radial-gradient(circle at 1px 1px, rgba(140, 170, 255, 0.5) 0.5px, transparent 0.5px);
-      background-size: 80px 80px;
+        radial-gradient(circle at 1px 1px, rgba(240, 200, 80, 0.6) 0.5px, transparent 0.5px);
+      background-size: 90px 90px;
     }
 
-    /* ── Content Wrapper ── */
+    /* ── Vignette ── */
+    .vignette {
+      position: fixed; inset: 0; z-index: 2; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(2, 3, 6, 0.6) 100%);
+    }
+
+    /* ── Content ── */
     .content {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 0 1.5rem;
+      position: relative; z-index: 3;
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh; padding: 0 1.5rem;
       opacity: 0;
-      animation: contentIn 2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    }
+
+    .content.loaded {
+      animation: contentIn 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes contentIn {
-      0%   { opacity: 0; filter: blur(8px); }
-      100% { opacity: 1; filter: blur(0px); }
+      0%   { opacity: 0; transform: translateY(20px); filter: blur(12px); }
+      100% { opacity: 1; transform: translateY(0); filter: blur(0); }
     }
 
     /* ── Hero ── */
     .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       text-align: center;
-      padding: 10vh 1rem 3rem;
-      max-width: 800px;
-      min-height: 70vh;
+      padding: 8vh 1rem 2rem;
+      max-width: 900px;
+      min-height: 85vh;
     }
 
-    /* Gaia Core — central orb with orbital rings */
-    .gaia-core {
+    /* ── Shooting Star Icon (Étoile Filante) ── */
+    .gaia-star {
       position: relative;
-      width: 200px;
-      height: 200px;
-      margin-bottom: 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 260px; height: 260px;
+      margin-bottom: 2rem;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      animation: starAppear 2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
     }
 
-    .gaia-core .orbit {
+    @keyframes starAppear {
+      0%   { opacity: 0; transform: scale(0.6) rotate(-20deg); }
+      60%  { opacity: 1; transform: scale(1.05) rotate(2deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    /* Orbital rings */
+    .gaia-star .ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(240, 200, 80, 0.06);
+    }
+    .gaia-star .ring:nth-child(1) {
+      width: 65%; height: 65%;
+      border-color: rgba(240, 200, 80, 0.12);
+      animation: spin 25s linear infinite;
+    }
+    .gaia-star .ring:nth-child(2) {
+      width: 85%; height: 85%;
+      border-color: rgba(240, 200, 80, 0.06);
+      border-style: dashed; border-width: 0.5px;
+      animation: spin 40s linear infinite reverse;
+    }
+    .gaia-star .ring:nth-child(3) {
+      width: 100%; height: 100%;
+      border-color: rgba(240, 200, 80, 0.04);
+      animation: spin 55s linear infinite;
+    }
+    .gaia-star .ring:nth-child(4) {
+      width: 130%; height: 130%;
+      border-color: rgba(240, 200, 80, 0.02);
+      animation: spin 80s linear infinite reverse;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Orbiting mini planets */
+    .orbit-planet {
       position: absolute;
+      width: 5px; height: 5px;
       border-radius: 50%;
-      border: 1px solid;
-      border-color: rgba(123, 154, 255, 0.08);
+    }
+    .orbit-planet:nth-child(5) {
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold), 0 0 20px rgba(240, 200, 80, 0.3);
+      top: 0%; left: 50%;
+      animation: spin 25s linear infinite;
+      transform-origin: 0px 82px;
+    }
+    .orbit-planet:nth-child(6) {
+      width: 3px; height: 3px;
+      background: var(--violet);
+      box-shadow: 0 0 6px var(--violet);
+      top: 18%; right: 5%;
+      animation: spin 40s linear infinite reverse;
+      transform-origin: -30px 40px;
+    }
+    .orbit-planet:nth-child(7) {
+      width: 4px; height: 4px;
+      background: var(--teal);
+      box-shadow: 0 0 6px var(--teal);
+      bottom: 10%; left: 8%;
+      animation: spin 55s linear infinite;
+      transform-origin: 50px -50px;
     }
 
-    .gaia-core .orbit:nth-child(1) {
-      width: 80%;
-      height: 80%;
-      border-color: rgba(123, 154, 255, 0.12);
-      animation: orbitSpin 30s linear infinite;
+    /* The central SVG shooting star */
+    .gaia-star .comet-wrap {
+      position: relative;
+      z-index: 2;
+      animation: cometFloat 6s ease-in-out infinite;
     }
 
-    .gaia-core .orbit:nth-child(2) {
-      width: 100%;
-      height: 100%;
-      border-color: rgba(123, 154, 255, 0.07);
-      animation: orbitSpin 45s linear infinite reverse;
-      border-style: dashed;
-      border-width: 0.5px;
+    @keyframes cometFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25%      { transform: translateY(-6px) rotate(1deg); }
+      75%      { transform: translateY(4px) rotate(-1deg); }
     }
 
-    .gaia-core .orbit:nth-child(3) {
-      width: 130%;
-      height: 130%;
-      border-color: rgba(123, 154, 255, 0.04);
-      animation: orbitSpin 60s linear infinite;
+    .gaia-star .comet-wrap svg {
+      filter: drop-shadow(0 0 20px rgba(240, 200, 80, 0.6))
+              drop-shadow(0 0 60px rgba(240, 200, 80, 0.25));
     }
 
-    .gaia-core .orbit:nth-child(4) {
-      width: 170%;
-      height: 170%;
-      border-color: rgba(123, 154, 255, 0.025);
-      animation: orbitSpin 90s linear infinite reverse;
-    }
-
-    /* Tiny orbital dots */
-    .gaia-core .orbit-dot {
+    /* Pulsing golden aura behind the star */
+    .gaia-star .aura {
       position: absolute;
-      width: 3px;
-      height: 3px;
+      width: 80px; height: 80px;
       border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 6px var(--accent);
+      background: radial-gradient(circle, rgba(240, 200, 80, 0.2) 0%, transparent 70%);
+      animation: auraPulse 4s ease-in-out infinite;
+      z-index: 1;
     }
 
-    .gaia-core .orbit-dot:nth-child(5) {
-      top: 8%;
-      left: 50%;
-      animation: orbitSpin 30s linear infinite;
-      transform-origin: 0 42%;
+    @keyframes auraPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(1.8); opacity: 0.3; }
     }
 
-    .gaia-core .orbit-dot:nth-child(6) {
-      bottom: 15%;
-      right: 5%;
-      width: 2px;
-      height: 2px;
-      background: var(--warm);
-      box-shadow: 0 0 6px var(--warm);
-      animation: orbitSpin 45s linear infinite reverse;
-      transform-origin: -50% -35%;
+    /* Particle ring */
+    .gaia-star .particles {
+      position: absolute;
+      width: 160px; height: 160px;
+      animation: spin 20s linear infinite;
     }
 
-    @keyframes orbitSpin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Central orb */
-    .gaia-core .orb {
-      width: 32px;
-      height: 32px;
+    .gaia-star .particles .p {
+      position: absolute;
+      width: 2px; height: 2px;
       border-radius: 50%;
-      background: radial-gradient(circle at 38% 32%,
-        #c8d8ff 0%,
-        var(--accent) 40%,
-        #3b5cc0 100%);
-      box-shadow:
-        0 0 40px rgba(123, 154, 255, 0.4),
-        0 0 100px rgba(123, 154, 255, 0.15),
-        inset 0 -4px 8px rgba(0, 0, 0, 0.3);
-      animation: orbPulse 5s ease-in-out infinite;
+      background: var(--gold-bright);
     }
 
-    @keyframes orbPulse {
-      0%, 100% { box-shadow: 0 0 40px rgba(123, 154, 255, 0.4), 0 0 100px rgba(123, 154, 255, 0.15); }
-      50%      { box-shadow: 0 0 50px rgba(123, 154, 255, 0.5), 0 0 120px rgba(123, 154, 255, 0.2); }
-    }
-
-    /* Title */
+    /* ── Title ── */
     .hero h1 {
       font-family: var(--font-display);
-      font-size: clamp(4rem, 12vw, 8rem);
-      font-weight: 300;
-      letter-spacing: 0.35em;
+      font-size: clamp(4.5rem, 14vw, 9rem);
+      font-weight: 400;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: transparent;
-      background: linear-gradient(160deg, #e8eeff 0%, #7b9aff 40%, #a78bfa 70%, #e8eeff 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
+      text-indent: 0.3em;
       line-height: 1;
-      margin-bottom: 1.25rem;
-      text-indent: 0.35em; /* offset letter-spacing for visual center */
+      margin-bottom: 1rem;
+      color: transparent;
+      background: linear-gradient(160deg, #ffe88a 0%, #f0c850 30%, #e8a020 60%, #ffe88a 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text; background-clip: text;
+      animation: goldShimmer 6s ease-in-out infinite, titleIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+      position: relative;
+    }
+
+    @keyframes goldShimmer {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes titleIn {
+      0%   { opacity: 0; transform: translateY(30px) scale(0.9); letter-spacing: 0.8em; }
+      100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 0.3em; }
     }
 
     .hero .tagline {
       font-family: var(--font-body);
-      font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+      font-size: clamp(0.7rem, 1.5vw, 0.9rem);
       color: var(--text-dim);
-      letter-spacing: 0.4em;
+      letter-spacing: 0.45em;
       text-transform: uppercase;
       font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 1.2s ease 1.3s forwards;
     }
 
-    .hero .horizon-line {
-      width: 120px;
-      height: 1px;
+    @keyframes fadeUp {
+      0%   { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Horizon line */
+    .horizon {
+      width: 180px; height: 1px;
       margin: 2.5rem 0;
-      background: linear-gradient(90deg, transparent, rgba(123, 154, 255, 0.3), transparent);
       position: relative;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.6s forwards;
     }
 
-    .hero .horizon-line::after {
+    .horizon::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.4;
+      animation: horizonPulse 4s ease-in-out infinite;
+    }
+
+    .horizon::after {
       content: '';
       position: absolute;
-      top: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px var(--accent);
-      opacity: 0.6;
+      top: -3px; left: 50%; transform: translateX(-50%);
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 12px var(--gold), 0 0 30px rgba(240, 200, 80, 0.3);
+    }
+
+    @keyframes horizonPulse {
+      0%, 100% { opacity: 0.4; }
+      50%      { opacity: 0.8; }
     }
 
     /* Scroll hint */
     .scroll-hint {
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
+      margin-top: 1.5rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
       opacity: 0;
-      animation: scrollHintIn 1s ease 2s forwards;
+      animation: fadeUp 1s ease 2.2s forwards;
     }
 
     .scroll-hint span {
-      font-size: 0.6rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      font-weight: 300;
+      font-size: 0.55rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--text-dim); font-weight: 300;
     }
 
-    .scroll-hint .chevron {
-      width: 12px;
-      height: 12px;
-      border-right: 1px solid var(--text-dim);
-      border-bottom: 1px solid var(--text-dim);
-      transform: rotate(45deg);
-      animation: chevronBob 2s ease-in-out infinite;
+    .scroll-hint .chevrons {
+      display: flex; flex-direction: column; gap: 2px; align-items: center;
     }
 
-    @keyframes scrollHintIn {
-      to { opacity: 0.5; }
+    .scroll-hint .chev {
+      width: 10px; height: 10px;
+      border-right: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+      transform: rotate(45deg); opacity: 0.3;
+      animation: chevBob 2.5s ease-in-out infinite;
     }
 
-    @keyframes chevronBob {
-      0%, 100% { transform: rotate(45deg) translateY(0); }
-      50%      { transform: rotate(45deg) translateY(4px); }
+    .scroll-hint .chev:nth-child(2) { animation-delay: 0.15s; opacity: 0.5; }
+    .scroll-hint .chev:nth-child(3) { animation-delay: 0.3s; opacity: 0.7; }
+
+    @keyframes chevBob {
+      0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.3; }
+      50%      { transform: rotate(45deg) translateY(4px); opacity: 0.8; }
     }
 
     /* ── Projects Section ── */
     .projects-section {
-      width: 100%;
-      max-width: 960px;
+      width: 100%; max-width: 1000px;
       padding: 2rem 0 10rem;
     }
 
     .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
+      text-align: center; margin-bottom: 4rem;
+      opacity: 0;
     }
+
+    .section-header.visible { animation: fadeUp 1s ease forwards; }
 
     .section-header .label {
       font-family: var(--font-body);
-      font-size: 0.65rem;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      font-weight: 300;
+      font-size: 0.6rem; letter-spacing: 0.6em;
+      text-transform: uppercase; color: var(--text-dim); font-weight: 300;
+      display: inline-flex; align-items: center; gap: 1.5em;
     }
 
-    .section-header .label::before,
-    .section-header .label::after {
-      content: '—';
-      margin: 0 1em;
-      opacity: 0.3;
+    .section-header .label .line {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(240, 200, 80, 0.2), transparent);
     }
 
     /* ── Project Cards ── */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       gap: 1.5rem;
       justify-items: center;
     }
 
     .project-card {
-      position: relative;
-      width: 100%;
-      max-width: 440px;
+      position: relative; width: 100%; max-width: 460px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2.25rem 2rem;
-      text-decoration: none;
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      overflow: hidden;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      opacity: 0;
-      transform: translateY(40px);
+      border-radius: 24px;
+      padding: 2.5rem 2.25rem;
+      text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      overflow: hidden; cursor: pointer;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      opacity: 0; transform: translateY(50px) scale(0.97);
     }
 
     .project-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 1; transform: translateY(0) scale(1);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Ambient glow follow cursor */
+    /* Spotlight follow cursor */
     .project-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      background: radial-gradient(
-        500px circle at var(--mx, 50%) var(--my, 50%),
-        var(--card-glow, rgba(123, 154, 255, 0.05)),
-        transparent 40%
-      );
+      content: ''; position: absolute; inset: 0;
+      border-radius: 24px; opacity: 0;
+      transition: opacity 0.6s ease;
+      background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%),
+        var(--card-glow, rgba(240, 200, 80, 0.04)), transparent 40%);
     }
 
     .project-card:hover::before { opacity: 1; }
 
+    /* Top shimmer line */
+    .project-card::after {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg,
+        transparent, var(--card-accent, var(--gold)) 50%, transparent);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .project-card:hover::after { opacity: 0.3; }
+
     .project-card:hover {
       border-color: var(--border-hover);
       background: var(--surface-hover);
-      transform: translateY(-6px) scale(1.01);
+      transform: translateY(-8px) scale(1.02);
       box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.4),
-        0 0 40px var(--card-shadow, rgba(123, 154, 255, 0.04));
+        0 25px 80px rgba(0, 0, 0, 0.5),
+        0 0 50px var(--card-shadow, rgba(240, 200, 80, 0.06)),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
     }
 
-    /* Decorative orbit trace on hover */
+    /* Orbit trace */
     .project-card .trace {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 1px;
-      height: 0;
-      background: linear-gradient(to bottom, var(--card-accent, var(--accent)), transparent);
-      opacity: 0;
-      transition: all 0.5s ease;
+      position: absolute; top: 0; left: 50%;
+      width: 1px; height: 0;
+      background: linear-gradient(to bottom, var(--card-accent, var(--gold)), transparent);
+      opacity: 0; transition: all 0.6s ease;
       transform: translateX(-50%);
     }
 
-    .project-card:hover .trace {
-      height: 40px;
-      top: -40px;
-      opacity: 0.15;
-    }
+    .project-card:hover .trace { height: 50px; top: -50px; opacity: 0.2; }
 
-    /* Card icon/node */
-    .card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
+    /* Card node */
+    .card-node {
+      width: 48px; height: 48px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
       position: relative;
-      background: var(--card-bg, var(--accent-soft));
-      border: 1px solid var(--card-border, rgba(123, 154, 255, 0.15));
-      transition: all 0.4s ease;
+      background: var(--card-bg, var(--gold-soft));
+      border: 1px solid var(--card-border, rgba(240, 200, 80, 0.12));
+      transition: all 0.5s ease;
     }
 
-    .project-card:hover .card-icon {
-      box-shadow: 0 0 20px var(--card-shadow, rgba(123, 154, 255, 0.15));
+    .project-card:hover .card-node {
+      box-shadow: 0 0 25px var(--card-shadow, rgba(240, 200, 80, 0.2));
+      transform: scale(1.08);
     }
 
     .card-title {
       font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 400;
-      letter-spacing: 0.03em;
-      color: #dce4f4;
+      font-size: 1.6rem; font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--text-bright);
+      transition: color 0.4s ease;
     }
+
+    .project-card:hover .card-title { color: #fff; }
 
     .card-desc {
       font-family: var(--font-body);
-      font-size: 0.82rem;
-      color: var(--text-dim);
-      line-height: 1.65;
-      font-weight: 300;
+      font-size: 0.82rem; color: var(--text-dim);
+      line-height: 1.7; font-weight: 300;
     }
 
     .card-action {
-      margin-top: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 400;
-      color: var(--card-accent, var(--accent));
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      margin-top: 0.75rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.65rem; letter-spacing: 0.25em;
+      text-transform: uppercase; font-weight: 400;
+      color: var(--card-accent, var(--gold));
+      opacity: 0; transform: translateX(-12px);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .card-action .arrow-line {
-      display: inline-block;
-      width: 20px;
-      height: 1px;
-      background: var(--card-accent, var(--accent));
+    .card-action .line {
+      display: inline-block; width: 0; height: 1px;
+      background: var(--card-accent, var(--gold));
+      transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       position: relative;
-      transition: width 0.3s ease;
     }
 
-    .card-action .arrow-line::after {
-      content: '';
-      position: absolute;
-      right: -1px;
-      top: -2px;
-      width: 5px;
-      height: 5px;
-      border-top: 1px solid var(--card-accent, var(--accent));
-      border-right: 1px solid var(--card-accent, var(--accent));
+    .card-action .line::after {
+      content: ''; position: absolute;
+      right: -1px; top: -2.5px;
+      width: 6px; height: 6px;
+      border-top: 1px solid var(--card-accent, var(--gold));
+      border-right: 1px solid var(--card-accent, var(--gold));
       transform: rotate(45deg);
     }
 
     .project-card:hover .card-action {
-      opacity: 1;
-      transform: translateX(0);
+      opacity: 1; transform: translateX(0);
     }
 
-    .project-card:hover .card-action .arrow-line {
-      width: 28px;
-    }
+    .project-card:hover .card-action .line { width: 32px; }
 
-    /* Card color themes */
+    /* Card themes */
     .theme-gold {
-      --card-accent: var(--warm);
-      --card-bg: var(--warm-soft);
-      --card-border: rgba(232, 196, 122, 0.15);
-      --card-glow: rgba(232, 196, 122, 0.05);
-      --card-shadow: rgba(232, 196, 122, 0.12);
+      --card-accent: var(--gold);
+      --card-bg: var(--gold-soft);
+      --card-border: rgba(240, 200, 80, 0.12);
+      --card-glow: rgba(240, 200, 80, 0.04);
+      --card-shadow: rgba(240, 200, 80, 0.15);
     }
-
     .theme-violet {
       --card-accent: var(--violet);
       --card-bg: var(--violet-soft);
-      --card-border: rgba(167, 139, 250, 0.15);
-      --card-glow: rgba(167, 139, 250, 0.05);
-      --card-shadow: rgba(167, 139, 250, 0.12);
+      --card-border: rgba(167, 139, 250, 0.12);
+      --card-glow: rgba(167, 139, 250, 0.04);
+      --card-shadow: rgba(167, 139, 250, 0.15);
     }
-
     .theme-blue {
-      --card-accent: var(--accent);
-      --card-bg: var(--accent-soft);
-      --card-border: rgba(123, 154, 255, 0.15);
-      --card-glow: rgba(123, 154, 255, 0.05);
-      --card-shadow: rgba(123, 154, 255, 0.12);
+      --card-accent: var(--blue);
+      --card-bg: var(--blue-soft);
+      --card-border: rgba(123, 154, 255, 0.12);
+      --card-glow: rgba(123, 154, 255, 0.04);
+      --card-shadow: rgba(123, 154, 255, 0.15);
     }
-
     .theme-teal {
       --card-accent: var(--teal);
       --card-bg: var(--teal-soft);
-      --card-border: rgba(94, 234, 212, 0.15);
-      --card-glow: rgba(94, 234, 212, 0.05);
-      --card-shadow: rgba(94, 234, 212, 0.12);
+      --card-border: rgba(94, 234, 212, 0.12);
+      --card-glow: rgba(94, 234, 212, 0.04);
+      --card-shadow: rgba(94, 234, 212, 0.15);
     }
-
     .theme-rose {
       --card-accent: var(--rose);
       --card-bg: var(--rose-soft);
-      --card-border: rgba(244, 114, 182, 0.15);
-      --card-glow: rgba(244, 114, 182, 0.05);
-      --card-shadow: rgba(244, 114, 182, 0.12);
+      --card-border: rgba(244, 114, 182, 0.12);
+      --card-glow: rgba(244, 114, 182, 0.04);
+      --card-shadow: rgba(244, 114, 182, 0.15);
     }
 
     /* ── Footer ── */
     .footer {
-      text-align: center;
-      padding: 2rem 1rem 3rem;
+      text-align: center; padding: 2rem 1rem 3rem;
       font-family: var(--font-body);
-      font-size: 0.6rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      opacity: 0.3;
-      font-weight: 300;
+      font-size: 0.55rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--text-dim);
+      opacity: 0.25; font-weight: 300;
+    }
+
+    /* ── Mouse trail canvas ── */
+    #mousetrail {
+      position: fixed; inset: 0; z-index: 2;
+      pointer-events: none;
     }
 
     /* ── Responsive ── */
     @media (max-width: 700px) {
-      .hero {
-        padding: 8vh 1rem 2rem;
-        min-height: 60vh;
-      }
-
-      .gaia-core {
-        width: 140px;
-        height: 140px;
-        margin-bottom: 2.5rem;
-      }
-
-      .gaia-core .orb {
-        width: 24px;
-        height: 24px;
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-
-      .project-card {
-        max-width: 100%;
-        padding: 1.75rem 1.5rem;
-        border-radius: 16px;
-      }
-
-      .card-title {
-        font-size: 1.3rem;
-      }
-
-      .section-header {
-        margin-bottom: 2.5rem;
-      }
-
+      .hero { padding: 6vh 1rem 2rem; min-height: 75vh; }
+      .gaia-star { width: 180px; height: 180px; margin-bottom: 1.5rem; }
+      .projects-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .project-card { max-width: 100%; padding: 2rem 1.5rem; border-radius: 18px; }
+      .card-title { font-size: 1.35rem; }
+      .section-header { margin-bottom: 2.5rem; }
       .scroll-hint { display: none; }
+      .orbit-planet:nth-child(5) { transform-origin: 0px 56px; }
     }
 
     @media (max-width: 400px) {
-      .hero h1 {
-        letter-spacing: 0.2em;
-        text-indent: 0.2em;
-      }
+      .hero h1 { letter-spacing: 0.15em; text-indent: 0.15em; }
     }
 
     /* ── Reduced Motion ── */
@@ -654,50 +625,124 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
       }
-
-      .project-card {
-        opacity: 1;
-        transform: none;
-      }
-
-      .content {
-        opacity: 1;
-        filter: none;
-      }
+      .project-card, .content, .gaia-star, .section-header { opacity: 1; transform: none; filter: none; }
     }
   </style>
 </head>
 <body>
 
   <canvas id="starfield" aria-hidden="true"></canvas>
+  <canvas id="shootingstar" aria-hidden="true"></canvas>
+  <canvas id="mousetrail" aria-hidden="true"></canvas>
   <div class="atmosphere" aria-hidden="true"></div>
-  <div class="atmosphere-extra" aria-hidden="true"></div>
-  <div class="constellation-grid" aria-hidden="true"></div>
+  <div class="atmo2" aria-hidden="true"></div>
+  <div class="dot-grid" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
 
-  <div class="content">
+  <div class="content" id="content">
 
     <header class="hero">
-      <div class="gaia-core" aria-hidden="true">
-        <div class="orbit"></div>
-        <div class="orbit"></div>
-        <div class="orbit"></div>
-        <div class="orbit"></div>
-        <div class="orbit-dot"></div>
-        <div class="orbit-dot"></div>
-        <div class="orb"></div>
+      <!-- Shooting Star / Étoile Filante Symbol -->
+      <div class="gaia-star">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="orbit-planet"></div>
+        <div class="orbit-planet"></div>
+        <div class="orbit-planet"></div>
+        <div class="aura"></div>
+        <div class="particles" id="particles"></div>
+        <div class="comet-wrap">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Tail / trail -->
+            <defs>
+              <linearGradient id="tailGrad" x1="0" y1="40" x2="80" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#f0c850" stop-opacity="0"/>
+                <stop offset="0.4" stop-color="#f0c850" stop-opacity="0.3"/>
+                <stop offset="1" stop-color="#ffe88a" stop-opacity="0.8"/>
+              </linearGradient>
+              <radialGradient id="starGlow" cx="62" cy="30" r="20" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#fff8e0"/>
+                <stop offset="0.3" stop-color="#ffe88a"/>
+                <stop offset="0.7" stop-color="#f0c850"/>
+                <stop offset="1" stop-color="#e8a020" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+              </filter>
+            </defs>
+            <!-- Comet tail -->
+            <path d="M8 52 Q25 42 40 36 Q52 31 60 30" stroke="url(#tailGrad)" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.7">
+              <animate attributeName="d" dur="3s" repeatCount="indefinite"
+                values="M8 52 Q25 42 40 36 Q52 31 60 30;M6 54 Q24 44 39 37 Q51 32 60 30;M8 52 Q25 42 40 36 Q52 31 60 30"/>
+            </path>
+            <path d="M15 48 Q28 40 42 35 Q54 30 60 30" stroke="url(#tailGrad)" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.4">
+              <animate attributeName="d" dur="4s" repeatCount="indefinite"
+                values="M15 48 Q28 40 42 35 Q54 30 60 30;M13 50 Q27 42 41 36 Q53 31 60 30;M15 48 Q28 40 42 35 Q54 30 60 30"/>
+            </path>
+            <!-- Star core -->
+            <circle cx="62" cy="30" r="8" fill="url(#starGlow)" filter="url(#glow)"/>
+            <!-- Inner bright -->
+            <circle cx="62" cy="30" r="3" fill="#fff8e0" opacity="0.9"/>
+            <!-- Sparkle rays -->
+            <line x1="62" y1="18" x2="62" y2="14" stroke="#ffe88a" stroke-width="1" opacity="0.6">
+              <animate attributeName="y2" dur="2s" repeatCount="indefinite" values="14;12;14"/>
+              <animate attributeName="opacity" dur="2s" repeatCount="indefinite" values="0.6;1;0.6"/>
+            </line>
+            <line x1="62" y1="42" x2="62" y2="46" stroke="#ffe88a" stroke-width="1" opacity="0.6">
+              <animate attributeName="y2" dur="2s" repeatCount="indefinite" values="46;48;46"/>
+            </line>
+            <line x1="50" y1="30" x2="46" y2="30" stroke="#ffe88a" stroke-width="1" opacity="0.5"/>
+            <line x1="74" y1="30" x2="78" y2="30" stroke="#ffe88a" stroke-width="1" opacity="0.5">
+              <animate attributeName="x2" dur="1.5s" repeatCount="indefinite" values="78;80;78"/>
+            </line>
+            <!-- Diagonal sparkles -->
+            <line x1="54" y1="22" x2="51" y2="19" stroke="#ffe88a" stroke-width="0.8" opacity="0.4">
+              <animate attributeName="opacity" dur="3s" repeatCount="indefinite" values="0.4;0.8;0.4"/>
+            </line>
+            <line x1="70" y1="22" x2="73" y2="19" stroke="#ffe88a" stroke-width="0.8" opacity="0.4">
+              <animate attributeName="opacity" dur="2.5s" repeatCount="indefinite" values="0.4;0.7;0.4"/>
+            </line>
+            <line x1="70" y1="38" x2="73" y2="41" stroke="#ffe88a" stroke-width="0.8" opacity="0.3"/>
+            <line x1="54" y1="38" x2="51" y2="41" stroke="#ffe88a" stroke-width="0.8" opacity="0.3"/>
+            <!-- Tiny trail sparkles -->
+            <circle cx="22" cy="45" r="1" fill="#f0c850" opacity="0.4">
+              <animate attributeName="opacity" dur="2s" repeatCount="indefinite" values="0.4;0;0.4"/>
+            </circle>
+            <circle cx="34" cy="39" r="1.2" fill="#f0c850" opacity="0.5">
+              <animate attributeName="opacity" dur="1.8s" repeatCount="indefinite" values="0.5;0.1;0.5"/>
+            </circle>
+            <circle cx="12" cy="50" r="0.8" fill="#f0c850" opacity="0.3">
+              <animate attributeName="opacity" dur="2.5s" repeatCount="indefinite" values="0.3;0;0.3"/>
+            </circle>
+          </svg>
+        </div>
       </div>
+
       <h1>Gaia</h1>
       <p class="tagline">a constellation of digital worlds</p>
-      <div class="horizon-line" aria-hidden="true"></div>
+
+      <div class="horizon" aria-hidden="true"></div>
+
       <div class="scroll-hint" aria-hidden="true">
         <span>Explore</span>
-        <div class="chevron"></div>
+        <div class="chevrons">
+          <div class="chev"></div>
+          <div class="chev"></div>
+          <div class="chev"></div>
+        </div>
       </div>
     </header>
 
     <section class="projects-section" aria-label="Projects">
-      <div class="section-header">
-        <span class="label">Orbiting Projects</span>
+      <div class="section-header" id="section-header">
+        <span class="label">
+          <span class="line"></span>
+          Orbiting Projects
+          <span class="line"></span>
+        </span>
       </div>
       <div class="projects-grid" id="projects-grid"></div>
     </section>
@@ -706,14 +751,14 @@
   </div>
 
   <script>
-    /* ═══════════════════════════════════
+    /* ═════════════════════════════════
        Project Registry
        ─────────────────────────────────
-       Add/remove objects to update the hub.
-       Available themes: theme-blue, theme-gold,
-       theme-violet, theme-teal, theme-rose
-    ═══════════════════════════════════ */
-    const PROJECTS = [
+       Add/remove to update. Themes:
+       theme-gold, theme-violet, theme-blue,
+       theme-teal, theme-rose
+    ═════════════════════════════════ */
+    var PROJECTS = [
       {
         url:   "https://anthonynadjari.github.io/PokemonSpendingTracker/",
         icon:  "\u26A1",
@@ -727,123 +772,100 @@
         theme: "theme-violet",
         title: "Privacy Policy",
         desc:  "Centralized privacy policy page for applications and services."
+      },
+      {
+        url:   "https://anthonynadjari.github.io/NBAPredictLab/",
+        icon:  "\uD83C\uDFC0",
+        theme: "theme-blue",
+        title: "NBA Predict Lab",
+        desc:  "AI-powered NBA game predictions and analytics laboratory."
       }
     ];
 
     /* ── Render Cards ── */
-    (function renderProjects() {
+    (function() {
       var grid = document.getElementById("projects-grid");
-
       PROJECTS.forEach(function(p, i) {
-        var card = document.createElement("a");
-        card.href = p.url;
-        card.target = "_blank";
-        card.rel = "noopener noreferrer";
-        card.className = "project-card " + p.theme;
-        card.style.transitionDelay = (i * 0.12) + "s";
-
-        card.innerHTML =
+        var a = document.createElement("a");
+        a.href = p.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+        a.className = "project-card " + p.theme;
+        a.style.transitionDelay = (i * 0.15) + "s";
+        a.innerHTML =
           '<div class="trace"></div>' +
-          '<div class="card-icon">' + p.icon + '</div>' +
+          '<div class="card-node">' + p.icon + '</div>' +
           '<div class="card-title">' + p.title + '</div>' +
           '<div class="card-desc">' + p.desc + '</div>' +
-          '<div class="card-action">Explore <span class="arrow-line"></span></div>';
-
-        card.addEventListener("mousemove", function(e) {
-          var r = card.getBoundingClientRect();
-          card.style.setProperty("--mx", (e.clientX - r.left) + "px");
-          card.style.setProperty("--my", (e.clientY - r.top) + "px");
+          '<div class="card-action">Explore <span class="line"></span></div>';
+        a.addEventListener("mousemove", function(e) {
+          var r = a.getBoundingClientRect();
+          a.style.setProperty("--mx", (e.clientX - r.left) + "px");
+          a.style.setProperty("--my", (e.clientY - r.top) + "px");
         });
-
-        grid.appendChild(card);
-      });
-
-      /* Intersection Observer for reveal */
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
-
-      document.querySelectorAll(".project-card").forEach(function(card) {
-        observer.observe(card);
+        grid.appendChild(a);
       });
     })();
 
+    /* ── Intersection Observer ── */
+    (function() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+      document.querySelectorAll(".project-card, .section-header").forEach(function(el) { obs.observe(el); });
+    })();
+
+    /* ── Intro sequence ── */
+    window.addEventListener("load", function() {
+      document.getElementById("content").classList.add("loaded");
+    });
+
+    /* ── Particle ring ── */
+    (function() {
+      var cont = document.getElementById("particles");
+      if (!cont) return;
+      for (var i = 0; i < 12; i++) {
+        var d = document.createElement("div");
+        d.className = "p";
+        var angle = (i / 12) * Math.PI * 2;
+        var radius = 60 + Math.random() * 20;
+        d.style.left = (80 + Math.cos(angle) * radius) + "px";
+        d.style.top = (80 + Math.sin(angle) * radius) + "px";
+        d.style.opacity = (0.2 + Math.random() * 0.5).toString();
+        d.style.width = (1 + Math.random() * 2) + "px";
+        d.style.height = d.style.width;
+        d.style.animation = "auraPulse " + (2 + Math.random() * 3) + "s ease-in-out infinite " + (Math.random() * 2) + "s";
+        cont.appendChild(d);
+      }
+    })();
+
     /* ── Starfield ── */
-    (function initStarfield() {
-      var canvas = document.getElementById("starfield");
-      var ctx = canvas.getContext("2d");
-      var stars = [];
-      var shootingStars = [];
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      var W, H;
+    (function() {
+      var c = document.getElementById("starfield"), ctx = c.getContext("2d");
+      var stars = [], dpr = Math.min(window.devicePixelRatio || 1, 2), W, H;
 
       function resize() {
-        W = window.innerWidth;
-        H = window.innerHeight;
-        canvas.width = W * dpr;
-        canvas.height = H * dpr;
-        canvas.style.width = W + "px";
-        canvas.style.height = H + "px";
+        W = window.innerWidth; H = window.innerHeight;
+        c.width = W * dpr; c.height = H * dpr;
+        c.style.width = W + "px"; c.style.height = H + "px";
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         seed();
       }
 
       function seed() {
         stars = [];
-        var count = Math.min(Math.floor((W * H) / 3200), 400);
-        for (var i = 0; i < count; i++) {
-          var layer = Math.random();
+        var n = Math.min(Math.floor((W * H) / 2400), 500);
+        for (var i = 0; i < n; i++) {
+          var deep = Math.random();
           stars.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            r: layer < 0.7 ? Math.random() * 0.8 + 0.2 : Math.random() * 1.4 + 0.5,
-            base: layer < 0.7 ? Math.random() * 0.4 + 0.1 : Math.random() * 0.5 + 0.3,
-            speed: Math.random() * 0.0006 + 0.0002,
+            x: Math.random() * W, y: Math.random() * H,
+            r: deep < 0.6 ? Math.random() * 0.7 + 0.15 : deep < 0.9 ? Math.random() * 1.2 + 0.4 : Math.random() * 1.8 + 0.8,
+            base: deep < 0.6 ? Math.random() * 0.3 + 0.05 : Math.random() * 0.5 + 0.2,
+            speed: Math.random() * 0.0007 + 0.0002,
             phase: Math.random() * Math.PI * 2,
-            parallax: layer < 0.7 ? 0.03 : 0.1,
-            hue: Math.random() < 0.15 ? (200 + Math.random() * 40) : (220 + Math.random() * 20)
+            px: deep < 0.6 ? 0.02 : 0.08,
+            warm: Math.random() < 0.12
           });
-        }
-      }
-
-      function spawnShootingStar() {
-        if (shootingStars.length >= 1 || Math.random() > 0.0006) return;
-        var x0 = Math.random() * W;
-        var y0 = Math.random() * H * 0.5;
-        var a = Math.PI / 4 + Math.random() * 0.5 - 0.25;
-        shootingStars.push({
-          x: x0, y: y0,
-          vx: Math.cos(a) * (2.5 + Math.random() * 2),
-          vy: Math.sin(a) * (2.5 + Math.random() * 2),
-          life: 1,
-          decay: 0.01 + Math.random() * 0.008,
-          len: 40 + Math.random() * 50
-        });
-      }
-
-      function drawShootingStars() {
-        for (var i = shootingStars.length - 1; i >= 0; i--) {
-          var s = shootingStars[i];
-          s.x += s.vx;
-          s.y += s.vy;
-          s.life -= s.decay;
-          if (s.life <= 0) { shootingStars.splice(i, 1); continue; }
-
-          var g = ctx.createLinearGradient(s.x, s.y,
-            s.x - s.vx * s.len / 3, s.y - s.vy * s.len / 3);
-          g.addColorStop(0, "rgba(210, 225, 255, " + (s.life * 0.7) + ")");
-          g.addColorStop(1, "rgba(210, 225, 255, 0)");
-          ctx.beginPath();
-          ctx.moveTo(s.x, s.y);
-          ctx.lineTo(s.x - s.vx * s.len / 3, s.y - s.vy * s.len / 3);
-          ctx.strokeStyle = g;
-          ctx.lineWidth = 1;
-          ctx.stroke();
         }
       }
 
@@ -852,21 +874,200 @@
 
       function frame(t) {
         ctx.clearRect(0, 0, W, H);
-
         for (var i = 0; i < stars.length; i++) {
           var s = stars[i];
           var a = s.base + Math.sin(t * s.speed + s.phase) * 0.25;
           if (a < 0) a = 0;
-          var dy = s.y - scrollY * s.parallax;
-
+          var dy = s.y - scrollY * s.px;
           ctx.beginPath();
           ctx.arc(s.x, dy, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = "hsla(" + s.hue + ", 30%, 82%, " + a + ")";
+          if (s.warm) {
+            ctx.fillStyle = "rgba(240, 210, 140, " + a + ")";
+          } else {
+            ctx.fillStyle = "rgba(200, 210, 240, " + a + ")";
+          }
           ctx.fill();
+          /* Add cross-glow for bright stars */
+          if (s.r > 1.2 && a > 0.3) {
+            ctx.save();
+            ctx.globalAlpha = a * 0.15;
+            ctx.strokeStyle = s.warm ? "#f0d28c" : "#c8d4f0";
+            ctx.lineWidth = 0.5;
+            ctx.beginPath(); ctx.moveTo(s.x - s.r * 3, dy); ctx.lineTo(s.x + s.r * 3, dy); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(s.x, dy - s.r * 3); ctx.lineTo(s.x, dy + s.r * 3); ctx.stroke();
+            ctx.restore();
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("resize", resize);
+      resize();
+      requestAnimationFrame(frame);
+    })();
+
+    /* ── Big Shooting Stars (Étoiles Filantes) ── */
+    (function() {
+      var c = document.getElementById("shootingstar"), ctx = c.getContext("2d");
+      var dpr = Math.min(window.devicePixelRatio || 1, 2), W, H;
+      var comets = [];
+
+      function resize() {
+        W = window.innerWidth; H = window.innerHeight;
+        c.width = W * dpr; c.height = H * dpr;
+        c.style.width = W + "px"; c.style.height = H + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function spawn() {
+        if (comets.length >= 2 || Math.random() > 0.003) return;
+        var x = Math.random() * W * 0.8;
+        var y = Math.random() * H * 0.4;
+        var angle = Math.PI / 5 + Math.random() * 0.4;
+        var speed = 4 + Math.random() * 4;
+        comets.push({
+          x: x, y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1,
+          decay: 0.006 + Math.random() * 0.006,
+          len: 80 + Math.random() * 100,
+          width: 1.5 + Math.random() * 1.5,
+          sparkles: []
+        });
+      }
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+
+        spawn();
+
+        for (var i = comets.length - 1; i >= 0; i--) {
+          var cm = comets[i];
+          cm.x += cm.vx; cm.y += cm.vy;
+          cm.life -= cm.decay;
+
+          /* Spawn sparkle particles */
+          if (Math.random() < 0.4) {
+            cm.sparkles.push({
+              x: cm.x + (Math.random() - 0.5) * 4,
+              y: cm.y + (Math.random() - 0.5) * 4,
+              life: 0.6 + Math.random() * 0.4,
+              decay: 0.02 + Math.random() * 0.02,
+              r: 0.5 + Math.random() * 1.5
+            });
+          }
+
+          /* Draw sparkles */
+          for (var j = cm.sparkles.length - 1; j >= 0; j--) {
+            var sp = cm.sparkles[j];
+            sp.life -= sp.decay;
+            if (sp.life <= 0) { cm.sparkles.splice(j, 1); continue; }
+            ctx.beginPath();
+            ctx.arc(sp.x, sp.y, sp.r * sp.life, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 232, 138, " + (sp.life * 0.5) + ")";
+            ctx.fill();
+          }
+
+          if (cm.life <= 0) { comets.splice(i, 1); continue; }
+
+          /* Comet head glow */
+          var headGrad = ctx.createRadialGradient(cm.x, cm.y, 0, cm.x, cm.y, 8);
+          headGrad.addColorStop(0, "rgba(255, 248, 220, " + (cm.life * 0.6) + ")");
+          headGrad.addColorStop(0.5, "rgba(240, 200, 80, " + (cm.life * 0.3) + ")");
+          headGrad.addColorStop(1, "rgba(240, 200, 80, 0)");
+          ctx.beginPath();
+          ctx.arc(cm.x, cm.y, 8, 0, Math.PI * 2);
+          ctx.fillStyle = headGrad;
+          ctx.fill();
+
+          /* Tail */
+          var tailLen = cm.len * cm.life;
+          var g = ctx.createLinearGradient(cm.x, cm.y,
+            cm.x - cm.vx / Math.abs(cm.vx) * tailLen * 0.6,
+            cm.y - cm.vy / Math.abs(cm.vy) * tailLen * 0.6);
+          g.addColorStop(0, "rgba(255, 232, 138, " + (cm.life * 0.7) + ")");
+          g.addColorStop(0.3, "rgba(240, 200, 80, " + (cm.life * 0.3) + ")");
+          g.addColorStop(1, "rgba(240, 200, 80, 0)");
+          ctx.beginPath();
+          ctx.moveTo(cm.x, cm.y);
+          ctx.lineTo(cm.x - cm.vx * tailLen / 4, cm.y - cm.vy * tailLen / 4);
+          ctx.strokeStyle = g;
+          ctx.lineWidth = cm.width * cm.life;
+          ctx.lineCap = "round";
+          ctx.stroke();
+
+          /* Second thinner trail */
+          var g2 = ctx.createLinearGradient(cm.x, cm.y,
+            cm.x - cm.vx * tailLen / 3, cm.y - cm.vy * tailLen / 3);
+          g2.addColorStop(0, "rgba(255, 248, 220, " + (cm.life * 0.4) + ")");
+          g2.addColorStop(1, "rgba(255, 248, 220, 0)");
+          ctx.beginPath();
+          ctx.moveTo(cm.x, cm.y);
+          ctx.lineTo(cm.x - cm.vx * tailLen / 3, cm.y - cm.vy * tailLen / 3);
+          ctx.strokeStyle = g2;
+          ctx.lineWidth = cm.width * cm.life * 0.4;
+          ctx.stroke();
         }
 
-        spawnShootingStar();
-        drawShootingStars();
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("resize", resize);
+      resize();
+      requestAnimationFrame(frame);
+    })();
+
+    /* ── Mouse Trail (golden sparkle follow) ── */
+    (function() {
+      var c = document.getElementById("mousetrail"), ctx = c.getContext("2d");
+      var dpr = Math.min(window.devicePixelRatio || 1, 2), W, H;
+      var particles = [], mx = -100, my = -100, active = false;
+
+      function resize() {
+        W = window.innerWidth; H = window.innerHeight;
+        c.width = W * dpr; c.height = H * dpr;
+        c.style.width = W + "px"; c.style.height = H + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      document.addEventListener("mousemove", function(e) {
+        mx = e.clientX; my = e.clientY; active = true;
+        for (var i = 0; i < 2; i++) {
+          particles.push({
+            x: mx + (Math.random() - 0.5) * 8,
+            y: my + (Math.random() - 0.5) * 8,
+            vx: (Math.random() - 0.5) * 1,
+            vy: (Math.random() - 0.5) * 1 - 0.5,
+            life: 1,
+            decay: 0.025 + Math.random() * 0.02,
+            r: 1 + Math.random() * 2,
+            gold: Math.random() < 0.7
+          });
+        }
+      });
+
+      document.addEventListener("mouseleave", function() { active = false; });
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.x += p.vx; p.y += p.vy;
+          p.vy += 0.01;
+          p.life -= p.decay;
+          if (p.life <= 0) { particles.splice(i, 1); continue; }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+          if (p.gold) {
+            ctx.fillStyle = "rgba(240, 200, 80, " + (p.life * 0.4) + ")";
+          } else {
+            ctx.fillStyle = "rgba(255, 248, 220, " + (p.life * 0.3) + ")";
+          }
+          ctx.fill();
+        }
+        /* Trim if too many */
+        if (particles.length > 150) particles.splice(0, particles.length - 150);
         requestAnimationFrame(frame);
       }
 
