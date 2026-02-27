@@ -121,6 +121,11 @@
       100% { transform: translate(-6%, 4%) scale(1.06); }
     }
 
+    @keyframes contentInMobile {
+      0%   { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
     /* ── Dot Grid ── */
     .dot-grid {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -676,6 +681,14 @@
 
       .content { padding: 0 1rem; }
 
+      /* No nebula atmosphere on iPhone (heavy animations) */
+      .atmosphere, .atmo2 { display: none; }
+
+      /* Shorter intro, no blur (blur is expensive on iOS) */
+      .content.loaded {
+        animation: contentInMobile 0.5s ease forwards;
+      }
+
       .hero {
         padding: 3vh 0.5rem 1rem;
         min-height: auto;
@@ -691,6 +704,12 @@
       .gaia-star .ring:nth-child(4) { display: none; } /* hide outermost ring */
       .gaia-star .aura { width: 60px; height: 60px; }
       .gaia-star .particles { display: none; } /* off for iPhone perf */
+
+      /* Static hero graphic on iPhone (no ring/orbit/float animations) */
+      .gaia-star .ring,
+      .gaia-star .orbit-planet,
+      .gaia-star .comet-wrap,
+      .gaia-star .aura { animation: none !important; }
 
       .orbit-planet:nth-child(5) { transform-origin: 0px 46px; }
 
@@ -1053,7 +1072,7 @@
         stars = [];
         var isMobile = W < 768;
         var isSmall = W < 430;
-        var n = isSmall ? Math.min(80, Math.floor((W * H) / 6000)) : (isMobile ? Math.min(200, Math.floor((W * H) / 4000)) : Math.min(500, Math.floor((W * H) / 2400)));
+        var n = isSmall ? Math.min(40, Math.floor((W * H) / 12000)) : (isMobile ? Math.min(200, Math.floor((W * H) / 4000)) : Math.min(500, Math.floor((W * H) / 2400)));
         for (var i = 0; i < n; i++) {
           var deep = Math.random();
           stars.push({
@@ -1086,8 +1105,8 @@
             ctx.fillStyle = "rgba(200, 210, 240, " + a + ")";
           }
           ctx.fill();
-          /* Add cross-glow for bright stars */
-          if (s.r > 1.2 && a > 0.3) {
+          /* Skip cross-glow on small screens for perf */
+          if (W >= 430 && s.r > 1.2 && a > 0.3) {
             ctx.save();
             ctx.globalAlpha = a * 0.15;
             ctx.strokeStyle = s.warm ? "#f0d28c" : "#c8d4f0";
