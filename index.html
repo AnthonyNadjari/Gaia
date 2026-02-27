@@ -158,9 +158,9 @@
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       text-align: center;
-      padding: 8vh 1rem 2rem;
+      padding: 8vh 1rem 1.25rem;
       max-width: 900px;
-      min-height: 85vh;
+      min-height: 72vh;
     }
 
     /* ── Shooting Star Icon (Étoile Filante) ── */
@@ -333,7 +333,7 @@
     /* Horizon line */
     .horizon {
       width: 180px; height: 1px;
-      margin: 2.5rem 0;
+      margin: 1.75rem 0;
       position: relative;
       opacity: 0;
       animation: fadeUp 1s ease 1.6s forwards;
@@ -396,11 +396,11 @@
     /* ── Projects Section ── */
     .projects-section {
       width: 100%; max-width: 1000px;
-      padding: 2rem 0 10rem;
+      padding: 1.25rem 0 10rem;
     }
 
     .section-header {
-      text-align: center; margin-bottom: 4rem;
+      text-align: center; margin-bottom: 2.5rem;
       opacity: 0;
     }
 
@@ -636,11 +636,11 @@
         letter-spacing: 0.3em;
       }
 
-      .horizon { width: 120px; margin: 1.5rem 0; }
+      .horizon { width: 120px; margin: 1rem 0; }
 
-      .projects-section { padding: 1rem 0 6rem; }
+      .projects-section { padding: 0.5rem 0 6rem; }
 
-      .section-header { margin-bottom: 2rem; }
+      .section-header { margin-bottom: 1.5rem; }
 
       .projects-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -656,7 +656,7 @@
       }
 
       .card-node { width: 42px; height: 42px; border-radius: 14px; font-size: 1.15rem; }
-      .card-title { font-size: 1.3rem; }
+      .card-title { font-size: 1.1rem; line-height: 1.25; }
       .card-desc { font-size: 0.8rem; line-height: 1.6; }
 
       /* On touch devices, show card-action always */
@@ -691,7 +691,7 @@
 
       .gaia-star .ring:nth-child(4) { display: none; } /* hide outermost ring */
       .gaia-star .aura { width: 60px; height: 60px; }
-      .gaia-star .particles { width: 120px; height: 120px; }
+      .gaia-star .particles { display: none; } /* off for iPhone perf */
 
       .orbit-planet:nth-child(5) { transform-origin: 0px 46px; }
 
@@ -708,11 +708,11 @@
         padding: 0 1rem;
       }
 
-      .horizon { width: 80px; margin: 1.2rem 0; }
+      .horizon { width: 80px; margin: 0.75rem 0; }
 
-      .projects-section { padding: 0.5rem 0 5rem; }
+      .projects-section { padding: 0.25rem 0 5rem; }
 
-      .section-header { margin-bottom: 1.5rem; }
+      .section-header { margin-bottom: 1rem; }
       .section-header .label { font-size: 0.55rem; letter-spacing: 0.4em; }
       .section-header .label .line { width: 24px; }
 
@@ -726,9 +726,9 @@
         padding: 1.5rem 1.25rem;
         border-radius: 16px;
         gap: 0.6rem;
-        /* Simpler transitions for mobile perf */
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        /* No backdrop-filter on small screens for better perf */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
       }
 
       .project-card.visible {
@@ -736,7 +736,7 @@
       }
 
       .card-node { width: 38px; height: 38px; border-radius: 12px; font-size: 1.05rem; }
-      .card-title { font-size: 1.15rem; }
+      .card-title { font-size: 0.9rem; line-height: 1.2; }
       .card-desc { font-size: 0.75rem; line-height: 1.55; }
       .card-action { font-size: 0.6rem; margin-top: 0.5rem; }
 
@@ -1053,7 +1053,8 @@
       function seed() {
         stars = [];
         var isMobile = W < 768;
-        var n = Math.min(Math.floor((W * H) / (isMobile ? 4000 : 2400)), isMobile ? 200 : 500);
+        var isSmall = W < 430;
+        var n = isSmall ? Math.min(80, Math.floor((W * H) / 6000)) : (isMobile ? Math.min(200, Math.floor((W * H) / 4000)) : Math.min(500, Math.floor((W * H) / 2400)));
         for (var i = 0; i < n; i++) {
           var deep = Math.random();
           stars.push({
@@ -1139,7 +1140,7 @@
 
       function frame() {
         ctx.clearRect(0, 0, W, H);
-
+        if (W < 430) { requestAnimationFrame(frame); return; }
         spawn();
 
         for (var i = comets.length - 1; i >= 0; i--) {
