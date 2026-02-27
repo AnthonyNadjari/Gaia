@@ -442,8 +442,7 @@
 
     .project-card.visible {
       opacity: 1; transform: translateY(0) scale(1);
-      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.35s ease-out, transform 0.35s ease-out;
     }
 
     /* Spotlight follow cursor */
@@ -937,18 +936,18 @@
         desc:  "Track and manage your Pok\u00e9mon collection spending with detailed analytics and insights."
       },
       {
-        url:   "https://anthonynadjari.github.io/NBAPredictLab/",
-        icon:  "\uD83C\uDFC0",
-        theme: "theme-blue",
-        title: "NBA Predict Lab",
-        desc:  "AI-powered NBA game predictions and analytics laboratory."
-      },
-      {
         url:   "https://anthonynadjari.github.io/Cashboard/",
         icon:  "\uD83D\uDCB0",
         theme: "theme-teal",
         title: "Cashboard",
         desc:  "Cash and dashboard management in one place."
+      },
+      {
+        url:   "https://anthonynadjari.github.io/NBAPredictLab/",
+        icon:  "\uD83C\uDFC0",
+        theme: "theme-blue",
+        title: "NBA Predict Lab",
+        desc:  "AI-powered NBA game predictions and analytics laboratory."
       },
       {
         url:   "https://anthonynadjari.github.io/NBAVisionEngine/",
@@ -987,7 +986,7 @@
         var a = document.createElement("a");
         a.href = p.url; a.target = "_blank"; a.rel = "noopener noreferrer";
         a.className = "project-card " + p.theme;
-        a.style.transitionDelay = (i * 0.15) + "s";
+        a.style.transitionDelay = (i * 0.05) + "s";
         a.innerHTML =
           '<div class="trace"></div>' +
           '<div class="card-node">' + p.icon + '</div>' +
@@ -1009,7 +1008,7 @@
         entries.forEach(function(e) {
           if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
         });
-      }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+      }, { threshold: 0.05, rootMargin: "0px 0px 80px 0px" });
       document.querySelectorAll(".project-card, .section-header").forEach(function(el) { obs.observe(el); });
     })();
 
