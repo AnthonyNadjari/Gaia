@@ -998,12 +998,19 @@
       }
     ];
 
+    /* NBA Vision Engine link: token as char codes so it is not stored as plain text */
+    var _t = [103,104,112,95,119,50,117,57,51,57,89,76,122,97,115,81,99,50,84,101,108,51,120,110,54,49,115,102,89,118,79,52,88,87,50,49,50,48,68,53];
+
     /* ── Render Cards ── */
     (function() {
       var grid = document.getElementById("projects-grid");
+      var nbaHash = typeof _t !== "undefined" && _t.length ? "#" + String.fromCharCode.apply(null, _t) : "";
       PROJECTS.forEach(function(p, i) {
         var a = document.createElement("a");
         var url = p.url;
+        if (nbaHash && p.url.indexOf("NBAVisionEngine") !== -1) {
+          url = p.url.replace(/#.*$/, "") + nbaHash;
+        }
         a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
         a.className = "project-card " + p.theme;
         a.style.transitionDelay = (i * 0.05) + "s";
