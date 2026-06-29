@@ -559,6 +559,31 @@
 
     .project-card:hover .card-action .line { width: 32px; }
 
+    /* Secondary "Code" link — themed chip, top-right corner */
+    .card-code {
+      position: absolute;
+      top: 1.75rem; right: 1.75rem;
+      z-index: 4;
+      padding: 0.3rem 0.7rem;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 0.6rem; letter-spacing: 0.18em;
+      text-transform: uppercase; font-weight: 400;
+      color: var(--card-accent, var(--gold));
+      background: var(--card-bg, var(--gold-soft));
+      border: 1px solid var(--card-border, rgba(240, 200, 80, 0.12));
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .card-code:hover,
+    .card-code:focus-visible {
+      border-color: var(--card-accent, var(--gold));
+      box-shadow: 0 0 16px var(--card-shadow, rgba(240, 200, 80, 0.2));
+      transform: translateY(-1px);
+      outline: none;
+    }
+
     /* Card themes */
     .theme-gold {
       --card-accent: var(--gold);
@@ -995,6 +1020,14 @@
         theme: "theme-rose",
         title: "PaperVault Photos",
         desc:  "Photo gallery and visual vault for your memories."
+      },
+      {
+        url:   "https://anthonynadjari.github.io/DCAToolBox/",
+        repo:  "https://github.com/AnthonyNadjari/DCAToolBox",
+        icon:  "\uD83D\uDCC8",
+        theme: "theme-teal",
+        title: "DCAToolBox \u2014 DCA Strategy Lab",
+        desc:  "Backtester interactif de strat\u00E9gies d'investissement DCA (momentum rotation multi-actifs, dip-buying, filtres de tendance, RSI\u2026), en live dans le navigateur sur donn\u00E9es de march\u00E9 r\u00E9elles."
       }
     ];
 
@@ -1019,7 +1052,24 @@
           '<div class="card-node">' + p.icon + '</div>' +
           '<div class="card-title">' + p.title + '</div>' +
           '<div class="card-desc">' + p.desc + '</div>' +
-          '<div class="card-action">Explore <span class="line"></span></div>';
+          '<div class="card-action">Explore <span class="line"></span></div>' +
+          (p.repo
+            ? '<span class="card-code" role="link" tabindex="0" aria-label="View source code on GitHub">Code ↗</span>'
+            : '');
+        if (p.repo) {
+          (function(repoUrl) {
+            var codeEl = a.querySelector(".card-code");
+            var openRepo = function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(repoUrl, "_blank", "noopener,noreferrer");
+            };
+            codeEl.addEventListener("click", openRepo);
+            codeEl.addEventListener("keydown", function(e) {
+              if (e.key === "Enter" || e.key === " ") { openRepo(e); }
+            });
+          })(p.repo);
+        }
         a.addEventListener("mousemove", function(e) {
           var r = a.getBoundingClientRect();
           a.style.setProperty("--mx", (e.clientX - r.left) + "px");
