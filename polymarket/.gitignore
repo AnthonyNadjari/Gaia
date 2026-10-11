@@ -1,6 +1,0 @@
-data/
-btc_raw/
-state.json
-state.json.tmp
-*.log
-__pycache__/
